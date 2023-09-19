@@ -62,7 +62,6 @@ int main(int ac, char **av)
 	}
 	free(lineptr);
 	free(lineptr_cp);
-	free(av);
 
 	return (0);
 }
