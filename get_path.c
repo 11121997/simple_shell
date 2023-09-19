@@ -41,7 +41,6 @@ char *get_location(char *cmd)
 			}
 		}
 		free(path_cpy);
-		free(file_path);
 
 		if (stat(cmd, &buffer) == 0)
 			return (cmd);
