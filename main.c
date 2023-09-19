@@ -60,6 +60,7 @@ int main(int ac, char **av)
 		av[i] = NULL;
 		execmd(av);
 	}
+	free(av);
 	free(lineptr);
 	free(lineptr_cp);
 
