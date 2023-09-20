@@ -24,5 +24,8 @@ void execmd(char **av)
 		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
 	}
 	else
+	{
+		write(2, "Error Fork", _strlen("Error Fork"));
 		perror("Error:");
+	}
 }
