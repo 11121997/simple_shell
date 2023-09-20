@@ -28,10 +28,10 @@ void execmd(char **av, char *name, char **environ, int ti);
 
 /* my environment */
 char **_getenv(char **environ);
-void my_printenv(void);
+void my_printenv();
 
 /* exit my shell */
-void my_exit(void);
+void my_exit();
 
 /* handle end of file*/
 void E_O_F(char *buf);
