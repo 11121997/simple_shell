@@ -14,18 +14,24 @@ void execmd(char **av)
 		if (execve(get_location(av[0]), av, environ) == -1)
 		{
 			perror("Error:");
+			write(2, "Execute command failed.\n", _strlen("Execute command failed.\n"));
 		}
 		exit(EXIT_FAILURE);
 	}
 	else if (pid > 0)
 	{
+		if (waitpid(pid, &status, WUNTRACED) == -1)
+		{
+			perror("waitpid");
+			write(2, "Error waitpid.\n" , _strlen("Error waitpid.\n"));
+		}
 		do {
 			waitpid(pid, &status, WUNTRACED);
 		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
 	}
 	else
 	{
-		write(2, "Error Fork", _strlen("Error Fork"));
 		perror("Error:");
+		write(2, "Fork failed.\n", _strlen("Fork failed.\n"));
 	}
 }

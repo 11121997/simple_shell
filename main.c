@@ -25,6 +25,8 @@ int main(int ac, char **av)
 		if (nchars_read == -1)
 		{
 			_putchar('\n');
+			perror("getline");
+			write(2, "Error getline.\n", _strlen("Error getline.\n"));
 			return (-1);
 		}
 		lineptr_cp = malloc(sizeof(char) * nchars_read);
