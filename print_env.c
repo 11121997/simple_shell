@@ -6,9 +6,10 @@
 void my_printenv(void)
 {
 	char **env = environ;
+	unsigned int i;
 
-	for (; *env; env++)
+	for (i = 0; env[i] != NULL; i++)
 	{
-		_puts(*env);
+		_putchar(i);
 	}
 }
