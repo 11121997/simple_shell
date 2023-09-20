@@ -1,70 +1,53 @@
 #include "shell.h"
 
+#include "shell.h"
+
 /**
  * main - main function loop for the shell
  * @ac: argument counter
  * @av: argument vector
+ * @environ: array of enviromental variables.
  * Return: Always 0 success
  */
-int main(int ac, char **av)
+int main(int ac, char **av, char **environ)
 {
-	char *prompt = "$ ";
-	char *lineptr = NULL, *lineptr_cp = NULL;
+	char *buf = NULL;
+	char **cmd = NULL;
 	size_t n = 0;
-	ssize_t nchars_read;
-	const char *delim = " \n";
-	char *token;
-	int num_tokens = 0;
-	int i;
-
+	ssize_t nchars_read = 0;
+	int i = 0;
 	(void)ac;
+
 	while (1)
 	{
-		_puts(prompt);
-		nchars_read = getline(&lineptr, &n, stdin);
-		if (nchars_read == -1)
+		i++;
+		inter_active();
+		signal(SIGINT, ctrlc);
+		nchars_read = getline(&buf, &n, stdin);
+		if (nchars_read == EOF)
 		{
-			_putchar('\n');
-			perror("getline");
-			write(2, "Error getline.\n", _strlen("Error getline.\n"));
-			return (-1);
+			E_O_F(buf);
 		}
-		lineptr_cp = malloc(sizeof(char) * nchars_read);
-		if (lineptr_cp == NULL)
+		else if (*buf == '\n')
 		{
-			perror("tsh: memory alloction error");
-			return (-1);
+			free(buf);
 		}
-		_strcpy(lineptr_cp, lineptr);
-		token = strtok(lineptr, delim);
-		while (token != NULL)
+		else
 		{
-			num_tokens++;
-			token = strtok(NULL, delim);
-		}
-		num_tokens++;
-		av = malloc(sizeof(char *) * num_tokens);
-		token = strtok(lineptr_cp, delim);
-		for (i = 0; token != NULL; i++)
-		{
-			av[i] = malloc(sizeof(char) * _strlen(token));
-			_strcpy(av[i], token);
-			if (_strcmp(token, "exit") == 0)
-			{
-				my_exit();
+			buf[_strlen(buf) - 1] = '\0';
+			cmd = tokinzer(buf, " \0");
+			free(buf);
+			if (_strcmp(cmd[0], "exit") != 0)
+				my_exit(cmd);
+			else if (_strcmp(cmd[0], "cd") != 0)
+				chd(cmd[1]);
+			else
+				child_process(cmd, av[0], environ, i);
 			}
-			if (_strcmp(token, "env") == 0)
-			{
-				my_printenv();
-			}
-			token = strtok(NULL, delim);
-		}
-		av[i] = NULL;
-		execmd(av);
+		fflush(stdin);
+		n = 0, buf = NULL;
 	}
-	free(av);
-	free(lineptr);
-	free(lineptr_cp);
-
-	return (0);
+	if (nchars_read == -1)
+		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }

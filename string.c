@@ -8,14 +8,15 @@
  */
 char *_strcpy(char *dest, char *src)
 {
-	int i = -1;
+	char *cp = dest;
 
-	do {
-		i++;
-		dest[i] = src[i];
-	} while (src[i] != '\0');
+	while (*src)
+	{
+		*dest++ = *src++;
+	}
+	*dest = '\0';
 
-	return (dest);
+	return (cp);
 }
 
 /**
@@ -23,38 +24,15 @@ char *_strcpy(char *dest, char *src)
  * @s: pointer to string array
  * Return: length of string
  */
-int _strlen(char *s)
+unsigned int _strlen(char *s)
 {
-	int i = 0;
+	unsigned int i = 0;
 
-	if (!s)
-		return (0);
-
-	while (*s++)
+	while (*(s + i) != '\0')
+	{
 		i++;
+	}
 	return (i);
-}
-
-/**
- * *_strdup - function that duplicate string
- * @str: string to duplicate
- * Return: pointer to duplicate string
- */
-char *_strdup(const char *str)
-{
-	int len = 0;
-	char *r;
-
-	if (str == NULL)
-		return (NULL);
-	while (*str++)
-		len++;
-	r = malloc(sizeof(char) * (len + 1));
-	if (!r)
-		return (NULL);
-	for (len++; len--;)
-		r[len] = *--str;
-	return (r);
 }
 
 /**
@@ -69,9 +47,9 @@ char *_strcat(char *dest, char *src)
 
 	while (*dest)
 		dest++;
+	*dest++ = '/';
 	while (*src)
 		*dest++ = *src++;
-	*dest = *src;
 	return (r);
 }
 
@@ -83,15 +61,14 @@ char *_strcat(char *dest, char *src)
  */
 int _strcmp(char *str1, char *str2)
 {
-	while (*str1 && *str2)
+	unsigned int i = 0;
+
+	while (str1[i])
 	{
-		if (*str1 != *str2)
-			return (*str1 - *str2);
-		str1++;
-		str2++;
+		if (str1[i] != str2[i])
+			return (0);
+		i++;
 	}
-	if (*str1 == *str2)
-		return (0);
-	else
-		return (*str1 < *str2 ? -1 : 1);
+
+	return (1);
 }

@@ -2,39 +2,57 @@
 #define SHELL_H
 
 /* libraries */
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
 #include <string.h>
-#include <sys/types.h>
-#include <sys/stat.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <stddef.h>
+#include <signal.h>
+#include <errno.h>
 
 extern char **environ;
 
-/* main.c */
-int main(int ac, char **av);
-
 /* strings */
 char *_strcpy(char *dest, char *src);
-int _strlen(char *s);
-char *_strdup(const char *str);
+unsigned int _strlen(char *s);
 char *_strcat(char *dest, char *src);
 int _strcmp(char *str1, char *str2);
-void _puts(char *str);
-int _putchar(char c);
+int a_to_i(char *str);
+char **tokinzer(char *str, const char *delim);
 
 /* execute */
-void execmd(char **av);
-
-/* get the location */
-char *get_location(char *cmd);
+void execmd(char **av, char *name, char **environ, int ti);
 
 /* my environment */
-char *_getenv(const char *name);
-void my_printenv();
+char **_getenv(char **environ);
+void my_printenv(void);
 
 /* exit my shell */
-void my_exit();
+void my_exit(void);
+
+/* handle end of file*/
+void E_O_F(char *buf);
+
+/*check if interactive mood or non*/
+void inter_active(void);
+
+/*check if CTRL+C is pressed*/
+void ctrlc(int sn);
+
+/* func create child process*/
+void child_process(char **av, char *name, char **environ, int cy);
+
+/* change directory func*/
+int chd(const char *path);
+
+/*memory managment*/
+void free_argv(char **argv);
+void exit_free(char **argv);
+
+/*handle errors*/
+void handle_errors(char *name, int ti, char **av);
 
 #endif
